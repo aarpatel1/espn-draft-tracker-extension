@@ -1,19 +1,20 @@
 // === ESPN Fantasy Football Draft Tracker ===
+// content.js - Watches ESPN draft log and logs drafted player names
 // Injected into the page via manifest.json content_scripts
 
 /*
  * Extracts player naems from the ESPN draft board DOM.
  */
 function extractDraftedPlayers() {
-    //TODO: Inspect ESPN's draft room and update this selector to match the actual DOM structure.
-    const playerElements = document.querySelectorAll('.drafted-player-name');
+    // Query all player names inside the live pick log
+    const playerElements = document.querySelectorAll('.pick-message__container .playerinfo__playername');
 
     // Convert to array and extract player names
     const draftedNames = Array.from(playerElements).map(el => el.textContent.trim());
 
     // Clear and log updated list
     console.clear();
-    console.log("Drafted players (from ESPN draft board):");
+    console.log("Drafted players:");
     draftedNames.forEach((name, i) => {
         console.log('${i + 1}. ${name}');
     });
@@ -25,18 +26,20 @@ function extractDraftedPlayers() {
  * Sets up a MutationObserver to watch the ESPN draft board for changes.
  */
 function startDraftObserver() {
-    //TODO: Inspect and replace with ESPN's actual draft board container selector
-    const draftBoard = document.querySelector('#draft-board-root');
-    if (!draftBoard) {
+    // Find the parent container that holds all pick messages
+    const draftLogContainer = document.querySelector('.pick-message__container')?.closest('ul');
+    if (!draftLogContainer) {
         console.warn("Draft board not found - is the draft room open and ready?");
         return;
     }
+
+    // Create a MutationObserver to watch for added elements
     const observer = new MutationObserver((mutationsList, observer) => {
         // Debound to avoid too many updates during rapid DOM changes
-        clearTimeout(window.draftUpdateTimer);
-            window.draftUpdateTimer = setTimeout(() => {
+        clearTimeout(window.draftDebounceTimer);
+            window.draftDebounceTimer = setTimeout(() => {
                 extractDraftedPlayers();
-            }, 300); 
+            }, 300); // Debounce time is 300 ms
     });
 
     // Start observing for DOM changes
@@ -48,6 +51,6 @@ function startDraftObserver() {
 // Wait until everything is fully loaded
 window.addEventListener('load', () => {
     setTimeout(() => {
-        setTimeout(startDraftObserver, 2500);
+        setTimeout(startDraftObserver, 2500); // Delay to allow dynamic UI to fully render for 2.5 seconds
     });
 })
