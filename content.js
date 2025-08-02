@@ -43,7 +43,7 @@ function startDraftObserver() {
     });
 
     // Start observing for DOM changes
-    observer.observe(draftBoard, {childList: true, subtree: true});
+    observer.observe(draftLogContainer, {childList: true, subtree: true});
 
     console.log("ESPN draft board observer started. Watching for drafted player updates...");
 }
