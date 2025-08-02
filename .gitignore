@@ -1,0 +1,5 @@
+# Ignore Chrome extension packaging files or OS metadata
+.DS_Store
+*.crx
+*.zip
+node_modules/
