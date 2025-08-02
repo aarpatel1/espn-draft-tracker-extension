@@ -16,6 +16,5 @@ A Chrome extension that monitors the ESPN Fantasy Football draft board in real t
 
 ## TODOs
 
-- Test ESPN selectors to see if live updates work
-- Optionally display suggestions via floating UI
-- Connect to a backend AI for live recommendations
+- Displaying suggestions and ability to interact with chatbot via floating UI
+- Connecting to backend AI for live recommendations
