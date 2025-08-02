@@ -34,7 +34,7 @@ function startDraftObserver() {
     }
 
     // Create a MutationObserver to watch for added elements
-    const observer = new MutationObserver((mutationsList, observer) => {
+    const observer = new MutationObserver(() => {
         // Debound to avoid too many updates during rapid DOM changes
         clearTimeout(window.draftDebounceTimer);
             window.draftDebounceTimer = setTimeout(() => {
